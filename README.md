@@ -4,7 +4,7 @@ Welcome to the **Distributed Benchmarking & Hosting Platform**! This platform is
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 *   **Polyglot Matching Engine Support**: Includes reference matching engines implemented in **C++17**, **Rust**, **Go**, and **TypeScript/Node.js**.
 *   **Dual Orchestration Environment (Docker & Native Fallback)**:
@@ -17,7 +17,7 @@ Welcome to the **Distributed Benchmarking & Hosting Platform**! This platform is
 
 ---
 
-## 🏗️ Repository Layout
+## Repository Layout
 
 ```text
 ├── backend/                  # Express + WebSockets platform server & telemetry orchestrator
@@ -29,7 +29,7 @@ Welcome to the **Distributed Benchmarking & Hosting Platform**! This platform is
 
 ---
 
-## 🛠️ Getting Started (Local Development)
+## Getting Started (Local Development)
 
 Follow these steps to run the complete platform stack locally on your computer.
 
@@ -69,7 +69,7 @@ Open **`http://localhost:5173`** (or the port output by Vite) in your browser to
 
 ---
 
-## 🐳 Docker Stack Setup (Staging / Production)
+## Docker Stack Setup (Staging / Production)
 
 To launch the entire platform (orchestrator server, telemetry handlers, and database records) inside unified containers, run:
 
@@ -79,7 +79,7 @@ docker-compose -f deploy/docker-compose.yml up --build
 
 ---
 
-## ☁️ Infrastructure as Code (IaC) & Deployment
+## Infrastructure as Code (IaC) & Deployment
 
 For deployment in cloud environments, look inside the `deploy/` directory:
 *   **Terraform**: Provision secure AWS clusters (ECS Fargate, EKS, RDS PostgreSQL, VPC networks) using the files in [deploy/terraform/](file:///Users/sakshamgupta/Documents/projects/iicpc/deploy/terraform/).
@@ -87,7 +87,7 @@ For deployment in cloud environments, look inside the `deploy/` directory:
 
 ---
 
-## 📝 Authors & Team Notes
+## Authors & Team Notes
 
 Built for the **IICPC Summer Hackathon 2026**. Feel free to add your teammate details here!
 *   **Saksham Gupta** - GitHub: [@Saksham-Gupta-GH](https://github.com/Saksham-Gupta-GH)
