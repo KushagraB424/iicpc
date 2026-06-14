@@ -45,7 +45,7 @@ export class LoadGenerator {
         targetUrl: this.targetUrl,
         targetRate
       },
-      execArgv: isTs ? ['-r', 'ts-node/register'] : undefined
+      execArgv: isTs ? ['-r', 'ts-node/register', '--max-old-space-size=48'] : ['--max-old-space-size=48']
     });
 
     worker.on('message', (msg) => {

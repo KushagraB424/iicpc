@@ -151,7 +151,7 @@ export class ContestantOrchestrator {
         });
 
         logCallback('[Orchestrator] Spawning native JS matching engine...\n');
-        this.localProcess = spawn('node', ['server.js'], { cwd: submissionDir, env: { ...process.env, PORT: '8080' } });
+        this.localProcess = spawn('node', ['--max-old-space-size=64', 'server.js'], { cwd: submissionDir, env: { ...process.env, PORT: '8080' } });
       } else if (isCpp) {
         const httplibPath = path.join(submissionDir, 'httplib.h');
         if (!fs.existsSync(httplibPath)) {
