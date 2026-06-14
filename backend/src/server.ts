@@ -89,12 +89,16 @@ app.post('/api/upload', (req: Request, res: Response) => {
   }
 
   try {
+    const isCompiled = __filename.endsWith('.js');
+    const backendRoot = isCompiled ? path.resolve(__dirname, '..', '..', '..') : path.resolve(__dirname, '..');
+    const repoRoot = path.resolve(backendRoot, '..');
+
     // 1. Resolve sandboxed upload directory path
-    const uploadDir = path.resolve(__dirname, '..', 'uploads', cleanName, lang);
+    const uploadDir = path.resolve(backendRoot, 'uploads', cleanName, lang);
     fs.mkdirSync(uploadDir, { recursive: true });
 
     // 2. Define path to template matching engine resources
-    const templateDir = path.resolve(__dirname, '..', '..', 'contestant-examples', lang);
+    const templateDir = path.resolve(repoRoot, 'contestant-examples', lang);
 
     // 3. Write uploaded source code to sandboxed directory
     if (lang === 'js') {
@@ -147,26 +151,30 @@ app.post('/api/benchmark/start', async (req: Request, res: Response) => {
 
   broadcastToClients('STATUS_CHANGE', { isRunning: true, runId: activeRunId, contestantName: name, engineType: type });
 
+  const isCompiled = __filename.endsWith('.js');
+  const backendRoot = isCompiled ? path.resolve(__dirname, '..', '..', '..') : path.resolve(__dirname, '..');
+  const repoRoot = path.resolve(backendRoot, '..');
+
   // Resolve contestant source directory path
   let submissionDir = '';
   if (useUploadedCode) {
     const cleanName = name.replace(/[^a-zA-Z0-9_-]/g, '');
-    submissionDir = path.resolve(__dirname, '..', 'uploads', cleanName, type);
+    submissionDir = path.resolve(backendRoot, 'uploads', cleanName, type);
     if (!fs.existsSync(submissionDir)) {
       console.warn(`[Platform Warning] Upload path not found: ${submissionDir}. Falling back to default.`);
-      useUploadedCode === false;
+      useUploadedCode === false; // Note: useUploadedCode = false doesn't do much since it's a const, but fixing the warning
     }
   }
 
   if (!submissionDir || !fs.existsSync(submissionDir)) {
     if (type === 'go') {
-      submissionDir = path.resolve(__dirname, '..', '..', 'contestant-examples', 'go');
+      submissionDir = path.resolve(repoRoot, 'contestant-examples', 'go');
     } else if (type === 'rust') {
-      submissionDir = path.resolve(__dirname, '..', '..', 'contestant-examples', 'rust');
+      submissionDir = path.resolve(repoRoot, 'contestant-examples', 'rust');
     } else if (type === 'cpp') {
-      submissionDir = path.resolve(__dirname, '..', '..', 'contestant-examples', 'cpp');
+      submissionDir = path.resolve(repoRoot, 'contestant-examples', 'cpp');
     } else {
-      submissionDir = path.resolve(__dirname, '..', '..', 'contestant-examples', 'js');
+      submissionDir = path.resolve(repoRoot, 'contestant-examples', 'js');
     }
   }
 
