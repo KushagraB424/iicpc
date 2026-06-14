@@ -114,7 +114,13 @@ async function placeOrder() {
     }
 
     const latency = Date.now() - sentTime;
-    
+    if (success) {
+      parentPort?.postMessage({
+        type: 'ORDER_PLACED',
+        payload: orderPayload
+      });
+    }
+
     parentPort?.postMessage({
       type: 'METRIC',
       payload: {
@@ -162,6 +168,12 @@ async function cancelOldestOrder() {
     }
 
     const latency = Date.now() - sentTime;
+    if (success) {
+      parentPort?.postMessage({
+        type: 'ORDER_CANCELLED',
+        payload: cancelPayload
+      });
+    }
 
     parentPort?.postMessage({
       type: 'METRIC',
