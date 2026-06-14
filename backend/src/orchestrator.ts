@@ -151,7 +151,7 @@ export class ContestantOrchestrator {
         });
 
         logCallback('[Orchestrator] Spawning native JS matching engine...\n');
-        this.localProcess = spawn('node', ['server.js'], { cwd: submissionDir });
+        this.localProcess = spawn('node', ['server.js'], { cwd: submissionDir, env: { ...process.env, PORT: '8080' } });
       } else if (isCpp) {
         const httplibPath = path.join(submissionDir, 'httplib.h');
         if (!fs.existsSync(httplibPath)) {
@@ -180,13 +180,13 @@ export class ContestantOrchestrator {
         }
 
         logCallback('[Orchestrator] Spawning native C++ matching engine...\n');
-        this.localProcess = spawn('./engine', [], { cwd: submissionDir });
+        this.localProcess = spawn('./engine', [], { cwd: submissionDir, env: { ...process.env, PORT: '8080' } });
       } else if (isGo) {
         logCallback('[Orchestrator] Spawning native Go matching engine...\n');
-        this.localProcess = spawn('go', ['run', 'main.go'], { cwd: submissionDir });
+        this.localProcess = spawn('go', ['run', 'main.go'], { cwd: submissionDir, env: { ...process.env, PORT: '8080' } });
       } else if (isRust) {
         logCallback('[Orchestrator] Spawning native Rust matching engine...\n');
-        this.localProcess = spawn('cargo', ['run', '--release'], { cwd: submissionDir });
+        this.localProcess = spawn('cargo', ['run', '--release'], { cwd: submissionDir, env: { ...process.env, PORT: '8080' } });
       }
 
       if (!this.localProcess) {
