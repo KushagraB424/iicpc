@@ -10,6 +10,7 @@ export class ContestantOrchestrator {
   private isDocker = true;
   public isRunning = false;
   private chaosInterval: NodeJS.Timeout | null = null;
+  private lastTelemetryLogTime = 0;
 
   constructor(private telemetryIngester: TelemetryIngester) {}
 
@@ -215,12 +216,13 @@ export class ContestantOrchestrator {
 
         for (const line of lines) {
           if (!line.trim()) continue;
-          logCallback(`[${streamName}] ${line}\n`);
 
+          let isTelemetryEvent = false;
           // Parse TRADE and CANCEL events in real-time
           try {
             if (line.startsWith('{') && line.includes('"type"')) {
               const event = JSON.parse(line.trim());
+              isTelemetryEvent = true;
               if (event.type === 'TRADE') {
                 this.telemetryIngester.recordActualTrade(event);
               } else if (event.type === 'ORDER') {
@@ -230,7 +232,17 @@ export class ContestantOrchestrator {
               }
             }
           } catch (err) {
-            // Safe ignore
+            isTelemetryEvent = false;
+          }
+
+          if (!isTelemetryEvent) {
+            logCallback(`[${streamName}] ${line}\n`);
+          } else {
+            const now = Date.now();
+            if (now - this.lastTelemetryLogTime > 500) {
+              this.lastTelemetryLogTime = now;
+              logCallback(`[${streamName}] ${line}\n`);
+            }
           }
         }
       };
